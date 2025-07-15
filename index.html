@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SURVEI MANDARKEU</title>
+    <link rel="icon" type="image/png" href="images/logo.png" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        select {
+            appearance: none;
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1rem;
+        }
+
+        .warning-row {
+            background-color: #ff0000 !important;
+        }
+    </style>
+</head>
+
+<body class="bg-[#5a4c43] font-sans">
+    <main class="max-w-3xl mx-auto p-8 bg-[#f1e9d4] rounded-md mt-10">
+       <section class="flex flex-col md:flex-row md:justify-between md:items-start gap-6 mb-6">
+    <p class="text-[23px] font-semibold text-[#2e1f0f] max-w-[400px] leading-tight">
+        Survei ini merupakan Reflikasi inovasi Kanwil Ditjen Perbendaharaan Provinsi Sulawesi Barat, dengan
+        tujuan untuk mengukur kesesuaian perilaku pegawai dengan Nilai-Nilai Kementerian Keuangan. Bapak/Ibu
+        diharapkan melakukan pengisian dengan mengisi 30 pertanyaan yang disusun dalam lima section Untuk <span id="triwulan"></span>. Pengisian
+        dilakukan paling lambat <span id="deadline-date"></span> pukul 23.59 WITA.
+    </p>
+    <img src="images/image.png" alt="Diagram Nilai-Nilai Kemenkeu" class="w-[300px] h-[300px] object-contain">
+</section>
+
+    
+        <hr class="border-t border-[#2e1f0f] mb-6">
+
+        <form class="space-y-6 text-[14px] text-[#2e1f0f] font-semibold"
+            onsubmit="event.preventDefault(); kirimKeFirebase();">
+            <div>
+                <label for="responden" class="block mb-1">Identitas Responden <span
+                        class="text-red-600">*</span></label>
+                <select id="responden" name="responden"
+                    class="w-60 text-[14px] font-normal border border-[#2e1f0f] rounded px-2 py-1">
+                    <option>Silahkan Pilih</option>
+
+                </select>
+            </div>
+
+            <div>
+                <label for="pegawai" class="block mb-1">Nama Pegawai yang dinilai <span
+                        class="text-red-600">*</span></label>
+                <select id="pegawai" name="pegawai"
+                    class="w-60 text-[14px] font-normal border border-[#2e1f0f] rounded px-2 py-1">
+                    <option>Silahkan Pilih</option>
+
+                </select>
+            </div>
+
+            <div>
+                <label for="seksi" class="block mb-1">Seksi/Subbagian <span class="text-red-600">*</span></label>
+                <select id="seksi" name="seksi"
+                    class="w-60 text-[14px] font-normal border border-[#2e1f0f] rounded px-2 py-1">
+                    <option>Silahkan Pilih</option>
+
+                </select>
+            </div>
+
+            <script>
+    function cekIdentitas(event) {
+    const responden = document.getElementById('responden').value;
+    const pegawai = document.getElementById('pegawai').value;
+    const seksi = document.getElementById('seksi').value;
+
+    if (responden === "Silahkan Pilih") {
+        alert("Silakan isi Identitas Responden terlebih dahulu.");
+        event.preventDefault();
+        event.target.checked = false;
+        return;
+    }
+
+    if (pegawai === "Silahkan Pilih") {
+        alert("Silakan isi Nama Pegawai yang dinilai terlebih dahulu.");
+        event.preventDefault();
+        event.target.checked = false;
+        return;
+    }
+
+    if (seksi === "Silahkan Pilih") {
+        alert("Silakan isi Seksi/Subbagian terlebih dahulu.");
+        event.preventDefault();
+        event.target.checked = false;
+        return;
+    }
+}
+
+</script>
+
+
+            <div class="text-[14px] font-normal mt-4 max-w-[300px] leading-tight">
+                1. Tidak Pernah<br>2. Jarang<br>3. Kadang-kadang<br>4. Seringkali<br>5. Selalu
+            </div>
+
+            <div class="w-full bg-[#f0e6d2] p-4 rounded-md space-y-4">
+                <p class="text-[18px] font-semibold mt-6 leading-relaxed">
+                    INTEGRITAS yang berarti seluruh Pegawai harus berpikir, berkata, berperilaku, dan bertindak dengan
+                    baik
+                    dan benar serta selalu memegang teguh Kode Etik dan prinsip-prinsip moral.
+                </p>
+                <div id="popupFrekuensi"
+                    class="fixed top-20 left-[62%] transform -translate-x-1/2 bg-gray-800 text-white text-xs p-3 rounded-lg shadow-lg hidden z-50">
+                    <p>
+                        Frekuensi diisi dengan jumlah selama satu bulan periode.<br />
+                        Tidak pernah: 0 kali <br />
+                        Jarang: 1 - 2 kali <br />
+                        Kadang-kadang: 3 - 4 kali <br />
+                        Seringkali: 5 - 7 kali <br />
+                        Selalu: Terus menerus
+                    </p>
+                    
+                </div>
+
+
+
+                <script>
+                    function showPopupFrekuensi() {
+                        const popup = document.getElementById('popupFrekuensi');
+                        popup.classList.remove('hidden');
+
+                        // Sembunyikan otomatis setelah 5 detik
+                        setTimeout(() => {
+                            popup.classList.add('hidden');
+                        }, 3000);
+                    }
+
+                </script>
+
+                <div class="w-full overflow-x-auto">
+                    <table class="border-collapse border border-[#f0e6d2] w-full text-white text-[12px] text-sm">
+                        <thead>
+                            <tr class="text-center text-white font-semibold">
+                                <th class="bg-[#f0e6d2] px-3 py-2"></th>
+                                <th class="bg-[#3a1f0b] px-3 py-2 border border-[#2e1f0f] ">1</th>
+                                <th class="bg-[#3a1f0b] px-3 py-2 border border-[#2e1f0f]">2</th>
+                                <th class="bg-[#3a1f0b] px-3 py-2 border border-[#2e1f0f]">3</th>
+                                <th class="bg-[#3a1f0b] px-3 py-2 border border-[#2e1f0f]">4</th>
+                                <th class="bg-[#3a1f0b] px-3 py-2 border border-[#2e1f0f]">5</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- ======================= SOAL 1 - 7 =================== -->
+                            <tr class="bg-[#3a1f0b]">
+                                <td class="border border-[#3a1f0b] px-3 py-3 font-semibold text-xs leading-tight">
+                                    Menjaga
+                                    citra, harkat, dan martabat Kementerian Keuangan di berbagai forum, baik formal
+                                    maupun informal
+                                </td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row1"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="1"
+                                        onchange="hitungTotal(); showPopupFrekuensi();" required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row1"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="2"
+                                        onchange="hitungTotal(); showPopupFrekuensi();" required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row1"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="3"
+                                        onchange="hitungTotal(); showPopupFrekuensi();" required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row1"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="4"
+                                        onchange="hitungTotal(); showPopupFrekuensi();" required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row1"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="5"
+                                        onchange="hitungTotal(); showPopupFrekuensi();" required></td>
+                            </tr>
+
+                            <tr class="bg-[#3a1f0b]">
+                                <td class="border border-[#3a1f0b] px-3 py-3 font-semibold text-xs leading-tight">
+                                    Menghindari konflik kepentingan pribadi, kelompok, maupun golongan</td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row2"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="1"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row2"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="2"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row2"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="3"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row2"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="4"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row2"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="5"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                            </tr>
+
+                            <tr class="bg-[#3a1f0b]">
+                                <td class="border border-[#3a1f0b] px-3 py-3 font-semibold text-xs leading-tight">
+                                    bersikap netral dalam Pemilihan Calon Presiden dan Wakil Presiden, Kepala Daerah dan
+                                    Wakil Kepala Daerah, serta Anggota Legislatif Pusat dan Daerah
+                                </td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row3"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="1"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row3"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="2"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row3"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="3"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row3"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="4"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row3"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="5"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                            </tr>
+
+                            <tr class="bg-[#3a1f0b]">
+                                <td class="border border-[#3a1f0b] px-3 py-3 font-semibold text-xs leading-tight">
+                                    Menggunakan media sosial dengan bijak dan tidak memamerkan kekayaan (flexing)</td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row4"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="1"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row4"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="2"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row4"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="3"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row4"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="4"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row4"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="5"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                            </tr>
+
+                            <tr class="bg-[#3a1f0b]">
+                                <td class="border border-[#3a1f0b] px-3 py-3 font-semibold text-xs leading-tight">
+                                    Menjadi teladan serta menegakkan Kode Etik dan Kode Perilaku</td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row5"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="1"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row5"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="2"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row5"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="3"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row5"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="4"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row5"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="5"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                            </tr>
+
+                            <tr class="bg-[#3a1f0b]">
+                                <td class="border border-[#3a1f0b] px-3 py-3 font-semibold text-xs leading-tight">Tidak
+                                    bertindak sewenang-wenang, melakukan perundungan (bullying) dan/ atau pelecehan
+                                    terhadap Pegawai atau pihak lain baik di dalam maupun di luar lingkungan kerja</td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row6"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="1"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row6"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="2"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row6"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="3"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row6"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="4"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row6"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="5"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                            </tr>
+
+                            <tr class="bg-[#3a1f0b]">
+                                <td class="border border-[#3a1f0b] px-3 py-3 font-semibold text-xs leading-tight">Tidak
+                                    memasuki tempat yang dipandang tidak pantas secara etika dan moral yang berlaku di
+                                    masyarakat, seperti tempat prostitusi dan perjudian, kecuali karena penugasan dan
+                                    tidak mengarah pada tindakan melanggar kesusilaan dengan lawan jenis atau sesama
+                                    jenis</td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row7"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="1"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row7"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="2"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row7"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="3"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row7"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="4"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row7"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="5"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                            </tr>
+
+                            <!-- ======== COPY PASTE UNTUK 8-30 ======== -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="w-full bg-[#f0e6d2] p-4 rounded-md space-y-4">
+                <p class="text-[18px] font-semibold mt-6 leading-relaxed">
+                    PROFESIONALISME yang berarti seluruh Pegawai harus bekerja dengan tuntas dan akurat berdasarkan
+                    kompetensi terbaik dan penuh tanggung jawab serta komitmen yang tinggi.
+                </p>
+
+                <div class="w-full overflow-x-auto">
+                    <table class="border-collapse border border-[#f0e6d2] w-full text-white text-[12px] text-sm">
+                        <thead>
+                            <tr class="text-center text-white font-semibold">
+                                <th class="bg-[#f0e6d2] px-3 py-2 "></th>
+                                <th class="bg-[#3a1f0b] px-3 py-2 border border-[#2e1f0f]">1</th>
+                                <th class="bg-[#3a1f0b] px-3 py-2 border border-[#2e1f0f]">2</th>
+                                <th class="bg-[#3a1f0b] px-3 py-2 border border-[#2e1f0f]">3</th>
+                                <th class="bg-[#3a1f0b] px-3 py-2 border border-[#2e1f0f]">4</th>
+                                <th class="bg-[#3a1f0b] px-3 py-2 border border-[#2e1f0f]">5</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="bg-[#3a1f0b]">
+                                <td
+                                    class="border border-[#2e1f0f] px-3 py-3 font-semibold text-xs leading-tight text-white">
+                                    Bekerja sesuai standar operasional prosedur dan kewenangan jabatan
+                                </td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row8"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="1"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row8"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="2"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row8"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="3"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row8"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="4"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row8"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="5"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                            </tr>
+
+                            <tr class="bg-[#3a1f0b]">
+                                <td
+                                    class="border border-[#2e1f0f] px-3 py-3 font-semibold text-xs leading-tight text-white">
+                                    Menyelesaikan tugas atau pekerjaan secara bertanggung jawab hingga tuntas</td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row9"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="1"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row9"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="2"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row9"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="3"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row9"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="4"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio" name="row9"
+                                        onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="5"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                            </tr>
+
+                            <tr class="bg-[#3a1f0b]">
+                                <td
+                                    class="border border-[#2e1f0f] px-3 py-3 font-semibold text-xs leading-tight text-white">
+                                    Mengoptimalkan kompetensi yang dimiliki untuk menyelesaikan tugas atau pekerjaan
+                                </td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row10" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="1"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row10" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="2"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row10" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="3"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row10" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="4"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row10" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="5"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                            </tr>
+
+                            <tr class="bg-[#3a1f0b]">
+                                <td
+                                    class="border border-[#2e1f0f] px-3 py-3 font-semibold text-xs leading-tight text-white">
+                                    Disiplin dalam pemanfaatan waktu kerja</td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row11" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="1"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row11" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="2"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row11" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="3"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row11" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="4"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row11" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="5"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                            </tr>
+
+                            <tr class="bg-[#3a1f0b]">
+                                <td
+                                    class="border border-[#2e1f0f] px-3 py-3 font-semibold text-xs leading-tight text-white">
+                                    Mengindahkan etika berkomunikasi dalam bercakap-cakap, bertelepon, menerima tamu,
+                                    dan surat-menyurat termasuk surat elektronik (e-mail) serta media komunikasi lainnya
+                                </td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row12" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="1"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row12" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="2"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row12" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="3"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row12" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="4"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row12" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="5"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                            </tr>
+
+                            <tr class="bg-[#3a1f0b]">
+                                <td
+                                    class="border border-[#2e1f0f] px-3 py-3 font-semibold text-xs leading-tight text-white">
+                                    Berpenampilan, berpakaian, dan memakai sepatu kerja sesuai dengan ketentuan dan
+                                    standar etika yang berlaku serta menggunakan tanda pengenal (nametag) Pegawai saat
+                                    jam kerja atau keperluan dinas</td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row13" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="1"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row13" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="2"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row13" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="3"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row13" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="4"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row13" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="5"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                            </tr>
+
+                            <tr class="bg-[#3a1f0b]">
+                                <td
+                                    class="border border-[#2e1f0f] px-3 py-3 font-semibold text-xs leading-tight text-white">
+                                    Merespon kritik dan saran secara proporsional</td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row14" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="1"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row14" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="2"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row14" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="3"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row14" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="4"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row14" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="5"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="w-full bg-[#f0e6d2] p-4 rounded-md space-y-4">
+                <p class="text-[18px] font-semibold mt-6 leading-relaxed">
+                    SINERGI yang berarti seluruh Pegawai harus berkomitmen untuk membangun dan memastikan hubungan
+                    kerjasama internal yang produktif serta kemitraan yang harmonis dengan para pemangku kepentingan,
+                    untuk menghasilkan karya yang bermanfaat dan berkualitas.
+                </p>
+
+                <div class="w-full overflow-x-auto">
+                    <table class="border-collapse border border-[#f0e6d2] w-full text-white text-[12px] text-sm">
+                        <thead>
+                            <tr class="text-center text-white font-semibold">
+                                <th class="bg-[#f0e6d2] px-3 py-2 "></th>
+                                <th class="bg-[#3a1f0b] px-3 py-2 border border-[#2e1f0f]">1</th>
+                                <th class="bg-[#3a1f0b] px-3 py-2 border border-[#2e1f0f]">2</th>
+                                <th class="bg-[#3a1f0b] px-3 py-2 border border-[#2e1f0f]">3</th>
+                                <th class="bg-[#3a1f0b] px-3 py-2 border border-[#2e1f0f]">4</th>
+                                <th class="bg-[#3a1f0b] px-3 py-2 border border-[#2e1f0f]">5</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="bg-[#3a1f0b]">
+                                <td
+                                    class="border border-[#2e1f0f] px-3 py-3 font-semibold text-xs leading-tight text-white">
+                                    Saling mengenal dan memahami antar sesama pegawai walaupun berbeda latar belakang,
+                                    ras, warna kulit, agama, asal-usul, jenis kelamin, status pernikahan, umur atau
+                                    kondisi kecacatan
+                                </td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row15" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="1"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row15" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="2"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row15" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="3"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row15" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="4"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row15" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="5"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                            </tr>
+
+                            <tr class="bg-[#3a1f0b]">
+                                <td
+                                    class="border border-[#2e1f0f] px-3 py-3 font-semibold text-xs leading-tight text-white">
+                                    Bersikap kooperatif dengan unit kerja lain yang terkait dalam pelaksanaan tugas</td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row16" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="1"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row16" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="2"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row16" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="3"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row16" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="4"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row16" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="5"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                            </tr>
+
+                            <tr class="bg-[#3a1f0b]">
+                                <td
+                                    class="border border-[#2e1f0f] px-3 py-3 font-semibold text-xs leading-tight text-white">
+                                    Menghargai masukan, pendapat, dan gagasan orang lain</td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row17" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="1"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row17" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="2"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row17" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="3"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row17" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="4"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row17" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="5"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                            </tr>
+
+                            <tr class="bg-[#3a1f0b]">
+                                <td
+                                    class="border border-[#2e1f0f] px-3 py-3 font-semibold text-xs leading-tight text-white">
+                                    Menjaga komitmen terhadap keputusan bersama dan implementasinya</td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row18" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="1"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row18" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="2"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row18" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="3"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row18" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="4"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row18" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="5"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                            </tr>
+
+                            <tr class="bg-[#3a1f0b]">
+                                <td
+                                    class="border border-[#2e1f0f] px-3 py-3 font-semibold text-xs leading-tight text-white">
+                                    Bersedia untuk berbagi solusi, informasi dan/atau data sesuai kewenangan untuk
+                                    menyelesaikan masalah yang terkait dengan pekerjaan</td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row19" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="1"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row19" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="2"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row19" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="3"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row19" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="4"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row19" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="5"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                            </tr>
+
+                            <tr class="bg-[#3a1f0b]">
+                                <td
+                                    class="border border-[#2e1f0f] px-3 py-3 font-semibold text-xs leading-tight text-white">
+                                    Memberikan kesempatan untuk menunaikan ibadah ketika rapat kerja atau tugas
+                                    kedinasan sedang berlangsung</td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row20" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="1"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row20" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="2"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row20" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="3"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row20" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="4"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row20" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="5"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="w-full bg-[#f0e6d2] p-4 rounded-md space-y-4">
+                <p class="text-[18px] font-semibold mt-6 leading-relaxed">
+                    PELAYANAN yang berarti seluruh Pegawai harus memberikan pelayanan untuk memenuhi kepuasan para
+                    pemangku kepentingan dan dilaksanakan dengan sepenuh hati, transparan, cepat, akurat, dan aman.
+                </p>
+
+                <div class="w-full overflow-x-auto">
+                    <table class="border-collapse border border-[#f0e6d2] w-full text-white text-[12px] text-sm">
+                        <thead>
+                            <tr class="text-center text-white font-semibold">
+                                <th class="bg-[#f0e6d2] px-3 py-2"></th>
+                                <th class="bg-[#3a1f0b] px-3 py-2 border border-[#2e1f0f]">1</th>
+                                <th class="bg-[#3a1f0b] px-3 py-2 border border-[#2e1f0f]">2</th>
+                                <th class="bg-[#3a1f0b] px-3 py-2 border border-[#2e1f0f]">3</th>
+                                <th class="bg-[#3a1f0b] px-3 py-2 border border-[#2e1f0f]">4</th>
+                                <th class="bg-[#3a1f0b] px-3 py-2 border border-[#2e1f0f]">5</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="bg-[#3a1f0b]">
+                                <td
+                                    class="border border-[#2e1f0f] px-3 py-3 font-semibold text-xs leading-tight text-white">
+                                    Menunjukkan kepedulian, ramah, dan santun dalam memberikan pelayanan
+                                </td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row21" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="1"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row21" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="2"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row21" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="3"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row21" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="4"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row21" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="5"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                            </tr>
+
+                            <tr class="bg-[#3a1f0b]">
+                                <td
+                                    class="border border-[#2e1f0f] px-3 py-3 font-semibold text-xs leading-tight text-white">
+                                    Berupaya memberikan layanan yang tepat waktu, cepat, dan transparan</td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row22" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="1"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row22" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="2"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row22" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="3"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row22" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="4"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row22" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="5"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                            </tr>
+
+                            <tr class="bg-[#3a1f0b]">
+                                <td
+                                    class="border border-[#2e1f0f] px-3 py-3 font-semibold text-xs leading-tight text-white">
+                                    Memberikan pelayanan sesuai SOP dan dalam hal terdapat permasalahan, bekerja sama
+                                    dengan pihak-pihak terkait dalam penyelesaian permasalahan</td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row23" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="1"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row23" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="2"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row23" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="3"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row23" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="4"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row23" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="5"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                            </tr>
+
+                            <tr class="bg-[#3a1f0b]">
+                                <td
+                                    class="border border-[#2e1f0f] px-3 py-3 font-semibold text-xs leading-tight text-white">
+                                    Memberikan pelayanan sesuai SOP dan dalam hal terdapat permasalahan, bekerja sama
+                                    dengan pihak-pihak terkait dalam penyelesaian permasalahan</td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row24" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="1"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row24" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="2"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row24" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="3"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row24" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="4"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row24" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="5"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                            </tr>
+
+                            <tr class="bg-[#3a1f0b]">
+                                <td
+                                    class="border border-[#2e1f0f] px-3 py-3 font-semibold text-xs leading-tight text-white">
+                                    Bersikap adil dan tidak membedakan dalam memberikan pelayanan</td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row25" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="1"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row25" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="2"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row25" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="3"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row25" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="4"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row25" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="5"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="w-full bg-[#f0e6d2] p-4 rounded-md space-y-4">
+                <p class="text-[18px] font-semibold mt-6 leading-relaxed">
+                    KESEMPURNAAN yang berarti seluruh pegawai harus senantiasa melakukan upaya perbaikan di segala
+                    bidang untuk menjadi dan memberikan yang terbaik.
+                </p>
+
+                <div class="w-full overflow-x-auto">
+                    <table class="border-collapse border border-[#f0e6d2] w-full text-white text-[12px] text-sm">
+                        <thead>
+                            <tr class="text-center text-white font-semibold">
+                                <th class="bg-[#f0e6d2] px-3 py-2"></th>
+                                <th class="bg-[#3a1f0b] px-3 py-2 border border-[#2e1f0f]">1</th>
+                                <th class="bg-[#3a1f0b] px-3 py-2 border border-[#2e1f0f]">2</th>
+                                <th class="bg-[#3a1f0b] px-3 py-2 border border-[#2e1f0f]">3</th>
+                                <th class="bg-[#3a1f0b] px-3 py-2 border border-[#2e1f0f]">4</th>
+                                <th class="bg-[#3a1f0b] px-3 py-2 border border-[#2e1f0f]">5</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="bg-[#3a1f0b]">
+                                <td
+                                    class="border border-[#2e1f0f] px-3 py-3 font-semibold text-xs leading-tight text-white">
+                                    Terbuka terhadap usulan perbaikan dan informasi/pengetahuan baru
+                                </td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row26" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="1"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row26" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="2"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row26" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="3"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row26" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="4"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row26" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="5"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                            </tr>
+
+                            <tr class="bg-[#3a1f0b]">
+                                <td
+                                    class="border border-[#2e1f0f] px-3 py-3 font-semibold text-xs leading-tight text-white">
+                                    Berupaya untuk memberikan kinerja dan/atau layanan yang terbaik</td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row27" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="1"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row27" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="2"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row27" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="3"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row27" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="4"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row27" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="5"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                            </tr>
+
+                            <tr class="bg-[#3a1f0b]">
+                                <td
+                                    class="border border-[#2e1f0f] px-3 py-3 font-semibold text-xs leading-tight text-white">
+                                    Mendukung kreativitas/gagasan/pendapat yang bernilai tambah bagi kemajuan organisasi</td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row28" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="1"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row28" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="2"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row28" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="3"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row28" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="4"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row28" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="5"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                            </tr>
+
+                            <tr class="bg-[#3a1f0b]">
+                                <td
+                                    class="border border-[#2e1f0f] px-3 py-3 font-semibold text-xs leading-tight text-white">
+                                    Mendukung upaya inovasi yang tidak bertentangan dengan peraturan perundang-undangan</td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row29" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="1"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row29" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="2"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row29" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="3"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row29" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="4"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row29" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="5"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                            </tr>
+
+                            <tr class="bg-[#3a1f0b]">
+                                <td
+                                    class="border border-[#2e1f0f] px-3 py-3 font-semibold text-xs leading-tight text-white">
+                                    Aktif dalam kegiatan-kegiatan pengembangan kompetensi</td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row30" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="1"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row30" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="2"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row30" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="3"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row30" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="4"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                                <td class="bg-white text-center border border-[#2e1f0f]"><input type="radio"
+                                        name="row30" onclick="cekIdentitas(event)" class="w-5 h-5 accent-[#3a1f0b]" value="5"
+                                        onchange="hitungTotal(); showPopupFrekuensi(); " required></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            
+            <div class="flex flex-col items-center justify-center mt-8 relative">
+                    <button type="submit" class="bg-[#3a1f0b] text-white py-2 px-8 rounded-md">Kirim</button>
+    
+                    <div class="w-full flex justify-start mt-6">
+    <div class="w-full max-w-xs md:w-[250px] p-4 border border-[#3a1f0b] rounded-lg shadow-md bg-[#f7f2e9]">
+        <label for="nilaiTotal" class="block mb-2 text-[#2e1f0f] font-semibold">Penilai Anda</label>
+        <input type="text" id="nilaiTotal" readonly
+            class="border border-[#c8bdb4] w-full p-2 rounded-md text-center bg-white shadow-inner font-semibold text-[#3a1f0b]" />
+    </div>
+</div>
+
+                </div>
+        </form>
+    </main>
+
+   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyCr_Cf37bJxVdExfrJ-CjWzpfjvAiQ0tAQ",
+        authDomain: "surveikppnmajene.firebaseapp.com",
+        databaseURL: "https://surveikppnmajene-default-rtdb.firebaseio.com",
+        projectId: "surveikppnmajene",
+        storageBucket: "surveikppnmajene.appspot.com",
+        messagingSenderId: "640777729032",
+        appId: "1:640777729032:web:a33f948c1d985b9d560dbd",
+        measurementId: "G-36WTJ9Q78P"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    window.onload = function() {
+        loadPegawaiSelect();
+        loadRespondenSelect();
+        loadSeksiSelect();
+        loadTriwulanDanDeadline();
+    }
+
+    function loadTriwulanDanDeadline() {
+        Promise.all([
+            database.ref('pengaturan/surveimandarkeu/aktifTriwulan').once('value'),
+            database.ref('pengaturan/surveimandarkeu/deadline').once('value')
+        ]).then(([triwulanSnap, deadlineSnap]) => {
+            const triwulan = triwulanSnap.val() || "I";
+            const deadline = deadlineSnap.val() || "-";
+            let triwulanText = triwulan.replace("TRIWULAN_", "Triwulan ");
+
+            document.getElementById("triwulan").textContent = triwulanText;
+            document.getElementById("deadline-date").textContent = deadline;
+        });
+    }
+
+    function hitungTotal() {
+        let total = 0;
+        let jumlahDiisi = 0;
+        for (let i = 1; i <= 30; i++) {
+            let radios = document.getElementsByName('row' + i);
+            let isChecked = false;
+            for (let radio of radios) {
+                if (radio.checked) {
+                    total += parseInt(radio.value);
+                    jumlahDiisi++;
+                    isChecked = true;
+                }
+            }
+            let rowElement = radios[0].closest('tr');
+            if (!isChecked) {
+                rowElement.classList.add('warning-row');
+            } else {
+                rowElement.classList.remove('warning-row');
+            }
+        }
+
+        if (jumlahDiisi === 0) {
+            document.getElementById('nilaiTotal').value = '';
+            return null;
+        }
+        let nilaiAkhir = (total / 30 * 20).toFixed(2);
+        document.getElementById('nilaiTotal').value = nilaiAkhir;
+        return nilaiAkhir;
+    }
+
+    function kirimKeFirebase() {
+    const responden = document.getElementById('responden').value;
+    const pegawai = document.getElementById('pegawai').value;
+    const seksi = document.getElementById('seksi').value;
+
+    if (responden === "Silahkan Pilih" || pegawai === "Silahkan Pilih" || seksi === "Silahkan Pilih") {
+        alert("Silahkan lengkapi semua data terlebih dahulu.");
+        return;
+    }
+
+    let dataJawaban = {};
+    for (let i = 1; i <= 30; i++) {
+        let radios = document.getElementsByName('row' + i);
+        let isChecked = false;
+        for (let radio of radios) {
+            radio.parentElement.style.backgroundColor = '';
+            if (radio.checked) {
+                dataJawaban['row' + i] = parseInt(radio.value);
+                isChecked = true;
+            }
+        }
+        if (!isChecked) {
+            for (let radio of radios) {
+                radio.parentElement.style.backgroundColor = '#fecaca';
+            }
+            radios[0].closest('tr').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            alert(`Masih ada pertanyaan nomor ${i} yang belum dijawab!`);
+            return;
+        }
+    }
+
+    const nilaiTotal = hitungTotal();
+    if (nilaiTotal === null) return;
+
+    // Ambil triwulan aktif dari pengaturan
+    database.ref('pengaturan/surveimandarkeu/aktifTriwulan').once('value')
+        .then(snapshot => {
+            const triwulan = snapshot.val() || "TRIWULAN_I";
+
+            const ref = database.ref(`surveibestmandarkeu/${triwulan}/${pegawai}`);
+            
+            // Set seksi sekali
+            return ref.child('seksi').set(seksi).then(() => {
+                // Setelah seksi, masukkan data responden
+                return ref.child(responden).set({
+                    ...dataJawaban,
+                    nilaiTotal: nilaiTotal
+                });
+            });
+        })
+        .then(() => {
+            alert('✅ Survei berhasil dikirim!');
+            document.getElementById('nilaiTotal').value = '';
+        })
+        .catch((error) => {
+            console.error(error);
+            alert('❌ Gagal kirim data: ' + error);
+        });
+}
+
+
+    function loadPegawaiSelect() {
+        database.ref('DinilaiMandarkeu').once('value').then(snapshot => {
+            const data = snapshot.val();
+            const select = document.getElementById('pegawai');
+            select.innerHTML = '<option>Silahkan Pilih</option>';
+
+            if (data) {
+                let entries = Object.entries(data);
+                entries.sort((a, b) => (a[1].timestamp || 0) - (b[1].timestamp || 0));
+                entries.forEach(([nama, detail]) => {
+                    if (detail.hasOwnProperty('aktif') && detail.aktif === true) {
+                        const option = document.createElement('option');
+                        option.value = nama;
+                        option.text = nama;
+                        select.appendChild(option);
+                    }
+                });
+            }
+        });
+    }
+
+    function loadRespondenSelect() {
+        database.ref('RespondenMandarkeu').once('value').then(snapshot => {
+            const data = snapshot.val();
+            const select = document.getElementById('responden');
+            select.innerHTML = '<option>Silahkan Pilih</option>';
+
+            if (data) {
+                let entries = Object.entries(data);
+                entries.sort((a, b) => (a[1].timestamp || 0) - (b[1].timestamp || 0));
+                entries.forEach(([nama, detail]) => {
+                    if (detail.aktif === true) {
+                        const option = document.createElement('option');
+                        option.value = nama;
+                        option.text = nama;
+                        select.appendChild(option);
+                    }
+                });
+            }
+        });
+    }
+
+    function loadSeksiSelect() {
+        database.ref('DataSeksi').once('value').then(snapshot => {
+            const data = snapshot.val();
+            const select = document.getElementById('seksi');
+            select.innerHTML = '<option>Silahkan Pilih</option>';
+
+            if (data) {
+                let entries = Object.entries(data);
+                entries.sort((a, b) => (a[1].timestamp || 0) - (b[1].timestamp || 0));
+                entries.forEach(([nama, detail]) => {
+                    if (detail.aktif === true) {
+                        const option = document.createElement('option');
+                        option.value = nama;
+                        option.text = nama;
+                        select.appendChild(option);
+                    }
+                });
+            }
+        });
+    }
+</script>
+
+</body>
+
+</html>
